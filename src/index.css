@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Pali Resort & Club Luxury Palette */
+  --color-pali-forest: #163024;
+  --color-pali-forest-dark: #0E1F17;
+  --color-pali-ivory: #F7F4EC;
+  --color-pali-ivory-light: #FAF8F4;
+  --color-pali-gold: #C5A86A;
+  --color-pali-gold-light: #DFCA97;
+  --color-pali-olive: #526B4A;
+  --color-pali-olive-light: #6E8965;
+  --color-pali-border: #DDD8C9;
+  --color-pali-border-light: #E8E4D8;
+  --color-pali-text: #1D241F;
+  --color-pali-muted: #687067;
+
+  /* Status Colors */
+  --color-pali-green: #2E6B4F;
+  --color-pali-amber: #B4782A;
+  --color-pali-red: #B83A3A;
+}
+
+/* Global typography & base styling */
+html {
+  background-color: #F7F4EC;
+  color: #1D241F;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+/* Custom Pali Soft Elevated Shadows */
+.shadow-pali-sm {
+  box-shadow: 0 1px 2px 0 rgba(22, 48, 36, 0.05);
+}
+
+.shadow-pali-card {
+  box-shadow: 0 2px 6px -1px rgba(22, 48, 36, 0.04), 0 4px 16px -2px rgba(22, 48, 36, 0.05);
+}
+
+.shadow-pali-hover {
+  box-shadow: 0 8px 24px -4px rgba(22, 48, 36, 0.08), 0 4px 8px -2px rgba(22, 48, 36, 0.04);
+}
+
+.shadow-pali-dropdown {
+  box-shadow: 0 20px 32px -8px rgba(22, 48, 36, 0.12), 0 4px 8px -2px rgba(22, 48, 36, 0.04);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F4EC;
+}
+::-webkit-scrollbar-thumb {
+  background: #DDD8C9;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A86A;
+}

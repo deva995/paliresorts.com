@@ -1,0 +1,211 @@
+/*
+ * Pali Resort & Club — Staff Management
+ * Styling only. No employee or DataTables behavior changes.
+ */
+
+.pali-staff-master {
+  color: #163024;
+}
+
+.pali-staff-master .pali-staff-header,
+.pali-staff-master .pali-staff-directory {
+  background: #ffffff;
+  border: 1px solid #DDD8C9;
+  border-radius: 16px;
+}
+
+.pali-staff-master .pali-staff-header h2 {
+  color: #163024;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.pali-staff-master .pali-staff-directory h3 {
+  font-size: 15px;
+  font-weight: 800;
+  color: #163024;
+}
+
+/* Bootstrap 5 DataTables layout */
+
+.pali-staff-directory .dt-container {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  color: #244737;
+}
+
+.pali-staff-directory .dt-layout-row {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100%;
+  margin: 14px 0 !important;
+}
+
+.pali-staff-directory .dt-layout-cell {
+  min-width: 0;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.pali-staff-directory .dt-layout-full {
+  width: 100% !important;
+  flex: 1 1 100%;
+}
+
+.pali-staff-directory .dt-search,
+.pali-staff-directory .dt-length {
+  display: flex !important;
+  align-items: center;
+  gap: 9px;
+  color: #687067;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pali-staff-directory .dt-search input,
+.pali-staff-directory .dt-length select {
+  border: 1px solid #DDD8C9 !important;
+  border-radius: 10px !important;
+  padding: 9px 12px !important;
+  font-size: 12px !important;
+  background-color: #F7F4EC !important;
+  color: #163024 !important;
+  outline: none;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.pali-staff-directory .dt-search input {
+  width: 250px;
+  max-width: 100%;
+}
+
+.pali-staff-directory .dt-search input:focus,
+.pali-staff-directory .dt-length select:focus {
+  border-color: #C5A86A !important;
+  box-shadow: 0 0 0 2px #C5A86A33 !important;
+}
+
+/* Employee table */
+
+.pali-staff-directory table.dataTable,
+.pali-staff-directory table.table {
+  width: 100% !important;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 0 !important;
+}
+
+.pali-staff-directory table.dataTable thead th,
+.pali-staff-directory table.table thead th {
+  background: #F7F4EC !important;
+  color: #163024 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 13px 12px !important;
+  border-bottom: 1px solid #DDD8C9 !important;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.pali-staff-directory table.dataTable tbody td,
+.pali-staff-directory table.table tbody td {
+  padding: 13px 12px !important;
+  border-bottom: 1px solid #EAE6DC !important;
+  color: #244737;
+  vertical-align: middle;
+}
+
+.pali-staff-directory table.dataTable tbody tr:hover td,
+.pali-staff-directory table.table tbody tr:hover td {
+  background: #F7F4EC !important;
+}
+
+/* Search info and pagination */
+
+.pali-staff-directory .dt-info {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 12px;
+  color: #687067;
+}
+
+.pali-staff-directory .dt-paging {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+
+.pali-staff-directory .dt-paging button,
+.pali-staff-directory .dt-paging .dt-paging-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 34px;
+  height: 34px;
+  padding: 5px 9px !important;
+  border: 1px solid #DDD8C9 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  color: #163024 !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+}
+
+.pali-staff-directory .dt-paging .dt-paging-button.current {
+  background: #163024 !important;
+  color: #fff !important;
+  border-color: #163024 !important;
+}
+
+.pali-staff-directory .dt-paging .dt-paging-button:hover:not(.disabled) {
+  border-color: #C5A86A !important;
+}
+
+/* Retain the original button event handlers and permissions */
+
+.pali-staff-directory table button {
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.pali-staff-directory table button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .pali-staff-directory .dt-layout-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .pali-staff-directory .dt-search,
+  .pali-staff-directory .dt-length {
+    justify-content: flex-start;
+  }
+
+  .pali-staff-directory .dt-search input {
+    width: 100%;
+  }
+
+  .pali-staff-directory .dt-paging {
+    justify-content: flex-start;
+  }
+
+  .pali-staff-directory {
+    overflow-x: auto;
+  }
+}

@@ -1,0 +1,237 @@
+﻿category,section,item_name,price_inr,price_paise,image_file,image_status,is_active
+Soups and Salads,Indian Veg Soups,Veg Cream of Palak Soup,250,25000,images/Veg-Cream-of-Palak-Soup.jpg,matched,true
+Soups and Salads,Indian Veg Soups,Veg Cream of Tomato,250,25000,images/Veg-Cream-of-Tomato.jpg,matched,true
+Soups and Salads,Indian Non Veg Soup,Paya Shorba (2 Pieces),280,28000,images/Paya-Shorba-2-Pieces.jpg,matched,true
+Soups and Salads,Indian Non Veg Soup,Mulligatawny Soup Dal Soup,250,25000,images/Mulligatawny-Soup-Dal-Soup.jpg,matched,true
+Soups and Salads,Indian Non Veg Soup,Cream of Chicken Soup,270,27000,images/Cream-of-Chicken-Soup.jpg,matched,true
+Soups and Salads,Indian Non Veg Soup,Islamabadi Yakhni Soup,270,27000,images/Islamabadi-Yakhni-Soup.jpg,matched,true
+Soups and Salads,Chinese Veg Soups,Veg Manchow Soup,190,19000,images/Veg-Manchow-Soup.jpg,matched,true
+Soups and Salads,Chinese Veg Soups,Veg Sweet Corn Soup,190,19000,images/Veg-Sweet-Corn-Soup.jpg,matched,true
+Soups and Salads,Chinese Veg Soups,Veg Clear Soup,190,19000,images/Veg-Clear-Soup.jpg,matched,true
+Soups and Salads,Chinese Veg Soups,Veg Talumein Soup,190,19000,,missing,true
+Soups and Salads,Chinese Veg Soups,Veg Hot & Sour Soup,190,19000,images/Veg-Hot-Sour-Soup.jpg,matched,true
+Soups and Salads,Chinese Veg Soups,Veg Burnt Garlic Soup,210,21000,images/Veg-Burnt-Garlic-Soup.jpg,matched,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Manchow Soup,230,23000,images/Chicken-Manchow-Soup.jpg,matched,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Sweet Corn Soup,230,23000,images/Chicken-Sweet-Corn-Soup.jpg,matched,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Clear Soup,230,23000,images/Chicken-Clear-Soup.jpg,matched,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Talumein Soup,230,23000,,missing,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Hot & Sour Soup,230,23000,images/Chicken-Hot-Sour-Soup.jpg,matched,true
+Soups and Salads,Chinese Non Veg Soups,Chicken Burnt Garlic Soup,240,24000,images/Chicken-Burnt-Garlic-Soup.jpg,matched,true
+Soups and Salads,Salads,Green Salad,160,16000,images/Green-Salad.jpg,matched,true
+Soups and Salads,Salads,Russian Salad Veg,210,21000,images/Russian-Salad-Veg.jpg,matched,true
+Soups and Salads,Salads,Russian Salad Chicken,280,28000,images/Russian-Salad-Chicken.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Stuffed Mushroom Tandoori,370,37000,images/Stuffed-Mushroom-Tandoori.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Paneer Pahadi,440,44000,images/Paneer-Pahadi.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Veg Makhmali Tikka,350,35000,images/Veg-Makhmali-Tikka.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Baby Corn Mushroom Tandoori,350,35000,images/Baby-Corn-Mushroom-Tandoori.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Broccoli Banjara Tikka,350,35000,images/Broccoli-Banjara-Tikka.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Paneer Pall Top,430,43000,images/Paneer-Pall-Top.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Paneer Tiranga Tikka,440,44000,images/Paneer-Tiranga-Tikka.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Paneer Malai,440,44000,images/Paneer-Malai.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Cauliflower Tiranga,340,34000,images/Cauliflower-Tiranga.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Paneer Banjara,450,45000,images/Paneer-Banjara.jpg,matched,true
+Indian Starters,Veg Tandoori Starters,Tandoori ki Bahar,430,43000,,missing,true
+Indian Starters,Veg Tandoori Starters,Baby Aloo Tikka,320,32000,images/Baby-Aloo-Tikka.jpg,matched,true
+Indian Starters,Non Veg Starters,Masala Omelette,210,21000,images/Masala-Omelette.jpg,matched,true
+Indian Starters,Non Veg Starters,Masala Bhurji,230,23000,images/Masala-Bhurji.jpg,matched,true
+Indian Starters,Non Veg Starters,Kalimiri Chicken Fry,410,41000,,missing,true
+Indian Starters,Non Veg Starters,Mutton Chaap Masala Dry,510,51000,images/Mutton-Chaap-Masala-Dry.jpg,matched,true
+Indian Starters,Non Veg Starters,Chicken Koliwada,410,41000,images/Chicken-Koliwada.jpg,matched,true
+Indian Starters,Seafood Tawa Starters,Pomfret Tandoori,999,99900,images/Pomfret-Tandoori.jpg,matched,true
+Indian Starters,Seafood Tawa Starters,Surmai Tawa Fry,640,64000,images/Surmai-Tawa-Fry.jpg,matched,true
+Indian Starters,Seafood Tawa Starters,King Prawns Kolkata,640,64000,images/King-Prawns-Kolkata.jpg,matched,true
+Indian Starters,Seafood Tawa Starters,Bombil Fry,410,41000,images/Bombil-Fry.jpg,matched,true
+Indian Starters,Seafood Tawa Starters,Stuffed Bombe Dry,470,47000,,missing,true
+Indian Starters,Chicken Tandoori Starters,Tandoori Chicken,340,34000,images/Tandoori-Chicken.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Jungle Chicken Tikka,450,45000,images/Jungle-Chicken-Tikka.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Tikka,450,45000,images/Chicken-Tikka.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Achari Tikka,450,45000,images/Chicken-Achari-Tikka.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Tiranga Kabab,470,47000,,missing,true
+Indian Starters,Chicken Tandoori Starters,Chicken Malai Tikka,450,45000,images/Chicken-Malai-Tikka.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Reshmi,470,47000,images/Chicken-Reshmi.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Angara Tikka,470,47000,images/Chicken-Angara-Tikka.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Malaysian Kebab,520,52000,images/Chicken-Malaysian-Kebab.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Moong Mumtaz Tangdi (4 Pieces),540,54000,images/Moong-Mumtaz-Tangdi-4-Pieces.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Chicken Banjara,470,47000,images/Chicken-Banjara.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Tandoori Chicken Afghani,360,36000,images/Tandoori-Chicken-Afghani.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Tandoori Chaap,530,53000,images/Tandoori-Chaap.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Mutton Seekh Kabab,540,54000,images/Mutton-Seekh-Kabab.jpg,matched,true
+Indian Starters,Chicken Tandoori Starters,Raan E Sikandari,1370,137000,,missing,true
+Indian Starters,Seafood Tandoori Starters,Prawns Tandoori,850,85000,images/Prawns-Tandoori.jpg,matched,true
+Indian Starters,Seafood Tandoori Starters,Rawas Tikka,680,68000,images/Rawas-Tikka.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Bhindi Kurkure,290,29000,images/Bhindi-Kurkure.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Corn Aloo Tikki,290,29000,images/Corn-Aloo-Tikki.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Cheese Balls,310,31000,images/Cheese-Balls.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Cheese Corn Balls,330,33000,images/Cheese-Corn-Balls.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Hara Bhara Kabab,290,29000,images/Hara-Bhara-Kabab.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Cashew Nut Koliwada,310,31000,images/Cashew-Nut-Koliwada.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Cashew Nut Fry,330,33000,,missing,true
+Indian Starters,Veg Tawa Starters,Veg Cashew Nut Roll,340,34000,,missing,true
+Indian Starters,Veg Tawa Starters,Veg Bruschetta,380,38000,images/Veg-Bruschetta.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Garlic Toast,310,31000,images/Garlic-Toast.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Cheese Chilli Toast,390,39000,images/Cheese-Chilli-Toast.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Paneer Koliwada,410,41000,images/Paneer-Koliwada.jpg,matched,true
+Indian Starters,Veg Tawa Starters,Paneer Pakoda,410,41000,images/Paneer-Pakoda.jpg,matched,true
+Main Course,Veg Main Course,Paneer Makhani,450,45000,images/Paneer-Makhani.jpg,matched,true
+Main Course,Veg Main Course,Veg Banjara Masala,370,37000,images/Veg-Banjara-Masala.jpg,matched,true
+Main Course,Veg Main Course,Paneer Tikka Masala,470,47000,images/Paneer-Tikka-Masala.jpg,matched,true
+Main Course,Veg Main Course,Paneer Rara Masala,460,46000,images/Paneer-Rara-Masala.jpg,matched,true
+Main Course,Veg Main Course,Punjabi Dahi Kadi Pakoda,330,33000,images/Punjabi-Dahi-Kadi-Pakoda.jpg,matched,true
+Main Course,Veg Main Course,Dal Tadka,250,25000,images/Dal-Tadka.jpg,matched,true
+Main Course,Veg Main Course,Veg Kolhapuri,350,35000,images/Veg-Kolhapuri.jpg,matched,true
+Main Course,Veg Main Course,Veg Sigdi,430,43000,images/Veg-Sigdi.jpg,matched,true
+Main Course,Veg Main Course,Tawa Sabji,350,35000,images/Tawa-Sabji.jpg,matched,true
+Main Course,Veg Main Course,Veg Kadai,340,34000,images/Veg-Kadai.jpg,matched,true
+Main Course,Veg Main Course,Navratan Korma,370,37000,images/Navratan-Korma.jpg,matched,true
+Main Course,Veg Main Course,Veg Makhani,340,34000,images/Veg-Makhani.jpg,matched,true
+Main Course,Veg Main Course,Chana Masala,290,29000,images/Chana-Masala.jpg,matched,true
+Main Course,Veg Main Course,Palak Paneer,430,43000,images/Palak-Paneer.jpg,matched,true
+Main Course,Veg Main Course,Dal Fry,240,24000,images/Dal-Fry.jpg,matched,true
+Main Course,Veg Main Course,Dal Makhanwala,310,31000,images/Dal-Makhanwala.jpg,matched,true
+Main Course,Veg Main Course,Paneer Butter Masala,450,45000,images/Paneer-Butter-Masala.jpg,matched,true
+Main Course,Veg Main Course,Paneer Lajawab,460,46000,,missing,true
+Main Course,Veg Main Course,Paneer Pasanda,480,48000,images/Paneer-Pasanda.jpg,matched,true
+Main Course,Veg Main Course,Paneer Lazeez,460,46000,images/Paneer-Lazeez.jpg,matched,true
+Main Course,Veg Main Course,Veg Kofta,380,38000,images/Veg-Kofta.jpg,matched,true
+Main Course,Veg Main Course,Veg Nargisi Kofta Curry,390,39000,images/Veg-Nargisi-Kofta-Curry.jpg,matched,true
+Main Course,Veg Main Course,Veg Seekh Kebab Masala,390,39000,,missing,true
+Main Course,Veg Main Course,Methi Matar Malai,410,41000,images/Methi-Matar-Malai.jpg,matched,true
+Main Course,Veg Main Course,Cheese Butter Masala,430,43000,images/Cheese-Butter-Masala.jpg,matched,true
+Main Course,Veg Main Course,Bhutta Shimla Masala,310,31000,,missing,true
+Main Course,Veg Main Course,Veg Mughlai,350,35000,images/Veg-Mughlai.jpg,matched,true
+Main Course,Veg Main Course,Veg Handi,350,35000,images/Veg-Handi.jpg,matched,true
+Main Course,Veg Main Course,Veg Patiala,390,39000,images/Veg-Patiala.jpg,matched,true
+Main Course,Veg Main Course,Veg Koliwada Masala,390,39000,images/Veg-Koliwada-Masala.jpg,matched,true
+Main Course,Non Veg Main Course,Butter Chicken,750,75000,images/Butter-Chicken.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Rara Masala,470,47000,images/Chicken-Rara-Masala.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Tikka Masala,470,47000,images/Chicken-Tikka-Masala.jpg,matched,true
+Main Course,Non Veg Main Course,Egg Masala,230,23000,images/Egg-Masala.jpg,matched,true
+Main Course,Non Veg Main Course,Murgh Mussalam,850,85000,images/Murgh-Mussalam.jpg,matched,true
+Main Course,Non Veg Main Course,Matki Murgh,470,47000,images/Matki-Murgh.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Sigdi,470,47000,images/Chicken-Sigdi.jpg,matched,true
+Main Course,Non Veg Main Course,Egg Curry,230,23000,images/Egg-Curry.jpg,matched,true
+Main Course,Non Veg Main Course,Murg Mughalai,460,46000,images/Murg-Mughalai.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Handi,790,79000,images/Chicken-Handi.jpg,matched,true
+Main Course,Non Veg Main Course,Badami Chicken,450,45000,,missing,true
+Main Course,Non Veg Main Course,Kasoori Methi Chicken,450,45000,images/Kasoori-Methi-Chicken.jpg,matched,true
+Main Course,Non Veg Main Course,Tawa Chicken,470,47000,images/Tawa-Chicken.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Pasanda,470,47000,images/Chicken-Pasanda.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Nimbu,470,47000,images/Chicken-Nimbu.jpg,matched,true
+Main Course,Non Veg Main Course,Nargisi Kofta Chicken Curry,470,47000,,missing,true
+Main Course,Non Veg Main Course,Chicken Kolhapuri,460,46000,images/Chicken-Kolhapuri.jpg,matched,true
+Main Course,Non Veg Main Course,Chicken Banjara Masala,470,47000,images/Chicken-Banjara-Masala.jpg,matched,true
+Main Course,Non Veg Main Course,Murgh Matki,850,85000,images/Murgh-Matki.jpg,matched,true
+Main Course,Non Veg Main Course,Dhaniya Chicken,850,85000,images/Dhaniya-Chicken.jpg,matched,true
+Main Course,Raan Special,Mutton Rogan Josh,550,55000,images/Mutton-Rogan-Josh.jpg,matched,true
+Main Course,Raan Special,Mutton Chaap Masala,650,65000,images/Mutton-Chaap-Masala.jpg,matched,true
+Main Course,Raan Special,Bhuna Gosht,550,55000,images/Bhuna-Gosht.jpg,matched,true
+Main Course,Raan Special,Keema Matar,550,55000,images/Keema-Matar.jpg,matched,true
+Main Course,Raan Special,Mutton Handi,850,85000,images/Mutton-Handi.jpg,matched,true
+Main Course,Raan Special,Mutton Curry,850,85000,images/Mutton-Curry.jpg,matched,true
+Main Course,Raan Special,Mutton Dhuwa Masala,850,85000,images/Mutton-Dhuwa-Masala.jpg,matched,true
+Main Course,Raan Special,Mutton Malwani Curry,850,85000,images/Mutton-Malwani-Curry.jpg,matched,true
+Breads,Breads,Wheat Roti,40,4000,images/Wheat-Roti.jpg,matched,true
+Breads,Breads,Wheat Paratha,70,7000,images/Wheat-Paratha.jpg,matched,true
+Breads,Breads,Laccha Naan,70,7000,images/Laccha-Naan.jpg,matched,true
+Breads,Breads,Missi Roti,70,7000,images/Missi-Roti.jpg,matched,true
+Breads,Breads,Makai Roti,70,7000,images/Makai-Roti.jpg,matched,true
+Breads,Breads,Khasta Roti,70,7000,,missing,true
+Breads,Breads,Dhaniya Paratha,80,8000,images/Dhaniya-Paratha.jpg,matched,true
+Breads,Breads,Pudhina Paratha,80,8000,images/Pudhina-Paratha.jpg,matched,true
+Breads,Breads,Methi Paratha,80,8000,images/Methi-Paratha.jpg,matched,true
+Breads,Breads,Kulcha,70,7000,images/Kulcha.jpg,matched,true
+Breads,Breads,Stuffed Kulcha,110,11000,images/Stuffed-Kulcha.jpg,matched,true
+Breads,Breads,Kheema Naan,180,18000,images/Kheema-Naan.jpg,matched,true
+Breads,Breads,Kheema Kulcha,180,18000,images/Kheema-Kulcha.jpg,matched,true
+Breads,Breads,Paneer Kulcha,180,18000,images/Paneer-Kulcha.jpg,matched,true
+Breads,Breads,Cheese Garlic Naan,170,17000,images/Cheese-Garlic-Naan.jpg,matched,true
+Breads,Breads,Roti Ki Tokri,410,41000,images/Roti-Ki-Tokri.jpg,matched,true
+Rice and Biryani,Rice,Dal Khichdi,290,29000,images/Dal-Khichdi.jpg,matched,true
+Rice and Biryani,Rice,Jeera Rice,220,22000,images/Jeera-Rice.jpg,matched,true
+Rice and Biryani,Rice,Palak Khichdi,310,31000,images/Palak-Khichdi.jpg,matched,true
+Rice and Biryani,Rice,Sabji Pulao,280,28000,images/Sabji-Pulao.jpg,matched,true
+Rice and Biryani,Rice,Biryani Rice,220,22000,images/Biryani-Rice.jpg,matched,true
+Rice and Biryani,Rice,Curd Rice,290,29000,images/Curd-Rice.jpg,matched,true
+Rice and Biryani,Rice,Steam Rice,190,19000,images/Steam-Rice.jpg,matched,true
+Rice and Biryani,Biryani,Chicken Dum Biryani,440,44000,images/Chicken-Dum-Biryani.jpg,matched,true
+Rice and Biryani,Biryani,Veg Dum Biryani,360,36000,images/Veg-Dum-Biryani.jpg,matched,true
+Rice and Biryani,Biryani,Chicken Tawa Biryani,390,39000,images/Chicken-Tawa-Biryani.jpg,matched,true
+Rice and Biryani,Biryani,Mutton Biryani,480,48000,images/Mutton-Biryani.jpg,matched,true
+Rice and Biryani,Biryani,Veg Tawa Biryani,350,35000,images/Veg-Tawa-Biryani.jpg,matched,true
+Rice and Biryani,Biryani,King Prawns Tikka Biryani,680,68000,images/King-Prawns-Tikka-Biryani.jpg,matched,true
+Chinese Appetizers,Seafood Appetizers,Rawas Fish Sichuan,670,67000,images/Rawas-Fish-Sichuan.jpg,matched,true
+Chinese Appetizers,Seafood Appetizers,Rawas Fish Chilli,670,67000,images/Rawas-Fish-Chilli.jpg,matched,true
+Chinese Appetizers,Seafood Appetizers,King Prawns Chilli,680,68000,images/King-Prawns-Chilli.jpg,matched,true
+Chinese Appetizers,Seafood Appetizers,Rawas Steak Hot Black Garlic,680,68000,,missing,true
+Chinese Appetizers,Seafood Appetizers,King Prawns Hot Black Garlic,680,68000,images/King-Prawns-Hot-Black-Garlic.jpg,matched,true
+Chinese Appetizers,Seafood Appetizers,King Prawns Golden Fry,680,68000,images/King-Prawns-Golden-Fry.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Chicken Chilly Gravy,450,45000,images/Chicken-Chilly-Gravy.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Paneer In Choice Of Sauce,440,44000,images/Paneer-In-Choice-Of-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Assorted Veg With Cashewnut Sauce,390,39000,images/Assorted-Veg-With-Cashewnut-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Assorted Veg In Choice Of Sauce,390,39000,images/Assorted-Veg-In-Choice-Of-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Chicken In Choice Of Sauce,450,45000,images/Chicken-In-Choice-Of-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Chicken with Cashewnuts,470,47000,images/Chicken-with-Cashewnuts.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Chicken Black Bean Sauce,470,47000,images/Chicken-Black-Bean-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,Rawas Fish In Choice Of Sauce,680,68000,images/Rawas-Fish-In-Choice-Of-Sauce.jpg,matched,true
+Chinese Main Course,Chinese Main Course,King Prawns In Choice Of Sauce,680,68000,images/King-Prawns-In-Choice-Of-Sauce.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Triple Sichuan Rice,390,39000,images/Chicken-Triple-Sichuan-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Fried Rice,330,33000,images/Chicken-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Triple Sichuan Rice,350,35000,images/Veg-Triple-Sichuan-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Egg Fried Rice,260,26000,images/Egg-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Sichuan Fried Rice,330,33000,images/Chicken-Sichuan-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Fried Rice,310,31000,images/Veg-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Combination Rice,350,35000,images/Veg-Combination-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Burnt Garlic Fried Rice,340,34000,images/Chicken-Burnt-Garlic-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Singapore Fried Rice,320,32000,images/Veg-Singapore-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Hongkong Fried Rice,320,32000,images/Veg-Hongkong-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Veg Sichuan Fried Rice,310,31000,images/Veg-Sichuan-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Burnt Garlic Veg Fried Rice,320,32000,images/Burnt-Garlic-Veg-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Singapore Fried Rice,340,34000,images/Chicken-Singapore-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Hongkong Fried Rice,340,34000,images/Chicken-Hongkong-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Chicken Combination Rice,390,39000,images/Chicken-Combination-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Fried Rice,510,51000,images/Seafood-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Singapore Fried Rice,510,51000,images/Seafood-Singapore-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Hongkong Fried Rice,510,51000,images/Seafood-Hongkong-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Triple Schezwan Rice,510,51000,images/Seafood-Triple-Schezwan-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Combination Rice,510,51000,images/Seafood-Combination-Rice.jpg,matched,true
+Fried Rice and Noodles,Fried Rice,Seafood Burnt Garlic Fried Rice,510,51000,images/Seafood-Burnt-Garlic-Fried-Rice.jpg,matched,true
+Fried Rice and Noodles,Noodles,Chicken Hakka Noodles,340,34000,images/Chicken-Hakka-Noodles.jpg,matched,true
+Fried Rice and Noodles,Noodles,Veg Sichuan Hakka Noodles,320,32000,images/Veg-Sichuan-Hakka-Noodles.jpg,matched,true
+Fried Rice and Noodles,Noodles,Veg Hakka Noodles,320,32000,images/Veg-Hakka-Noodles.jpg,matched,true
+Fried Rice and Noodles,Noodles,Veg Chowmein,330,33000,images/Veg-Chowmein.jpg,matched,true
+Fried Rice and Noodles,Noodles,Veg American Chopsuey,340,34000,images/Veg-American-Chopsuey.jpg,matched,true
+Fried Rice and Noodles,Noodles,Chicken Sichuan Hakka Noodles,340,34000,images/Chicken-Sichuan-Hakka-Noodles.jpg,matched,true
+Fried Rice and Noodles,Noodles,Chicken Chowmein,340,34000,images/Chicken-Chowmein.jpg,matched,true
+Fried Rice and Noodles,Noodles,Chicken American Chopsuey,370,37000,images/Chicken-American-Chopsuey.jpg,matched,true
+Fried Rice and Noodles,Noodles,Sea Food Hakka Noodles,510,51000,images/Sea-Food-Hakka-Noodles.jpg,matched,true
+Fried Rice and Noodles,Noodles,Seafood Schezwan Hakka Noodles,510,51000,images/Seafood-Schezwan-Hakka-Noodles.jpg,matched,true
+Sandwiches,Sandwiches,Veg Grilled Cheese Sandwich,240,24000,images/Veg-Grilled-Cheese-Sandwich.jpg,matched,true
+Sandwiches,Sandwiches,Chicken Club Sandwich,280,28000,images/Chicken-Club-Sandwich.jpg,matched,true
+Snacks and Chaats,Snacks,French Fries,230,23000,images/French-Fries.jpg,matched,true
+Snacks and Chaats,Snacks,Chana Garlic Fry,220,22000,images/Chana-Garlic-Fry.jpg,matched,true
+Snacks and Chaats,Snacks,Chinese Bhel,290,29000,images/Chinese-Bhel.jpg,matched,true
+Snacks and Chaats,Snacks,Onion Rings,290,29000,images/Onion-Rings.jpg,matched,true
+Snacks and Chaats,Snacks,Babycorn Mushroom in Choice of Sauce,330,33000,images/Babycorn-Mushroom-in-Choice-of-Sauce.jpg,matched,true
+Snacks and Chaats,Snacks,Veg Spring Roll,350,35000,images/Veg-Spring-Roll.jpg,matched,true
+Snacks and Chaats,Snacks,Veg Finger Sichuan,350,35000,images/Veg-Finger-Sichuan.jpg,matched,true
+Snacks and Chaats,Snacks,Stir Fry Vegetables,320,32000,images/Stir-Fry-Vegetables.jpg,matched,true
+Snacks and Chaats,Snacks,Boiled Eggs (2 Eggs),210,21000,images/Boiled-Eggs-2-Eggs.jpg,matched,true
+Snacks and Chaats,Snacks,Chicken Spring Roll,390,39000,images/Chicken-Spring-Roll.jpg,matched,true
+Snacks and Chaats,Chaats,Chana Chat,170,17000,images/Chana-Chat.jpg,matched,true
+Snacks and Chaats,Chaats,Aloo Chat,190,19000,images/Aloo-Chat.jpg,matched,true
+Snacks and Chaats,Chaats,Peanut Chat,180,18000,images/Peanut-Chat.jpg,matched,true
+Accompaniments,Accompaniments,Roasted Papad,50,5000,images/Roasted-Papad.jpg,matched,true
+Accompaniments,Accompaniments,Masala Papad,70,7000,images/Masala-Papad.jpg,matched,true
+Accompaniments,Accompaniments,Khicha Papad,90,9000,images/Khicha-Papad.jpg,matched,true
+Desserts,Desserts,Rabdi,190,19000,images/Rabdi.jpg,matched,true
+Desserts,Desserts,Caramel Custard,190,19000,images/Caramel-Custard.jpg,matched,true
+Desserts,Desserts,Malai Kulfi,180,18000,images/Malai-Kulfi.jpg,matched,true
+Desserts,Desserts,Gulab Jamun (2 Pieces),140,14000,images/Gulab-Jamun-2-Pieces.jpg,matched,true
+Drinks (Beverages),Drinks,Matka Chass,290,29000,images/Matka-Chass.jpg,matched,true
+Drinks (Beverages),Drinks,Fresh Lime,60,6000,images/Fresh-Lime.jpg,matched,true
+Drinks (Beverages),Drinks,Jal Jeera,60,6000,,missing,true
+Drinks (Beverages),Drinks,Lemon Ice Tea,90,9000,images/Lemon-Ice-Tea.jpg,matched,true
+Drinks (Beverages),Drinks,Peach Ice Tea,90,9000,images/Peach-Ice-Tea.jpg,matched,true
+Drinks (Beverages),Drinks,Matka Lassi,370,37000,images/Matka-Lassi.jpg,matched,true
+Drinks (Beverages),Drinks,Lassi Glass,110,11000,images/Lassi-Glass.jpg,matched,true
+Drinks (Beverages),Drinks,Chass Glass,50,5000,images/Chass-Glass.jpg,matched,true

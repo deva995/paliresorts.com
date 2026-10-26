@@ -1,0 +1,215 @@
+CREATE OR REPLACE FUNCTION pali_runtime.access(t text, action text, r jsonb)
+ RETURNS boolean
+ LANGUAGE plpgsql
+ STABLE
+ SET search_path TO 'pg_catalog'
+AS $function$
+DECLARE c jsonb:=pali_runtime.context(); m text:=c->>'mode'; o text:=r->>'outlet_id'; session_id text:=r->>'dining_session_id';
+  p jsonb:=COALESCE(c->'permissions','[]'::jsonb); needs text[]; public_otp boolean;
+BEGIN
+  IF m IS NULL OR m='none' THEN RETURN false; END IF;
+  -- PostgreSQL row-lock SELECTs also apply UPDATE policies. Actual UPDATEs
+  -- require the separate WRITE check in the BEFORE trigger below.
+  IF action='UPDATE' THEN action:='SELECT'; ELSIF action='WRITE' THEN action:='UPDATE'; END IF;
+  IF m IN ('login','login_success') THEN
+    IF t='staff' THEN RETURN (lower(r->>'employee_code')=c->>'identifier' OR lower(r->>'email')=c->>'identifier' OR r->>'phone'=c->>'identifier') AND action IN ('SELECT','UPDATE'); END IF;
+    IF t='staff_sessions' THEN RETURN m='login_success' AND r->>'staff_id'=c->>'staffId' AND action IN ('SELECT','INSERT'); END IF;
+    IF action<>'SELECT' THEN RETURN false; END IF;
+    IF t IN ('roles','permissions','role_permissions','outlets') THEN RETURN true; END IF;
+    RETURN m='login_success' AND t IN ('staff_roles','staff_outlet_access','staff_module_access') AND r->>'staff_id'=c->>'staffId';
+  END IF;
+  IF m='authenticate' THEN
+    IF action<>'SELECT' THEN RETURN false; END IF;
+    IF t IN ('staff','staff_roles','staff_outlet_access','staff_module_access','staff_sessions') THEN
+      RETURN COALESCE(r->>'staff_id',r->>'id')=c->>'staffId';
+    END IF;
+    -- Internal metadata discovery for resource-owned authorization, never an HTTP result.
+    RETURN t IN ('roles','permissions','role_permissions','outlets','restaurant_tables','dining_sessions','orders','kots','kot_items','bills','payments','service_requests','menu_item_revisions');
+  END IF;
+  IF m='public' THEN
+    public_otp:=c->>'path' IN ('/api/v1/guest/otp/request','/api/v1/guest/otp/verify');
+    IF t='guest_session_tokens' THEN
+      IF c->>'path'='/api/v1/guest/menu' THEN RETURN action='SELECT' AND r->>'token_hash'=c->>'tokenHash'; END IF;
+      IF c->>'path'='/api/v1/guest/otp/verify' THEN RETURN r->>'id'=c->>'challenge' AND action IN ('SELECT','UPDATE'); END IF;
+      IF c->>'path'='/api/v1/guest/otp/request' THEN
+        RETURN action IN ('SELECT','INSERT') AND EXISTS (SELECT FROM public.dining_sessions d JOIN public.restaurant_tables rt ON rt.id=d.table_id
+          WHERE d.id::text=r->>'dining_session_id' AND rt.qr_public_code=c->>'qr' AND d.status='ACTIVE');
+      END IF;
+      RETURN false;
+    END IF;
+    IF t='customers' THEN RETURN public_otp AND c->>'path'='/api/v1/guest/otp/request' AND r->>'phone'=c->>'phone' AND action IN ('SELECT','INSERT','UPDATE'); END IF;
+    IF action='UPDATE' THEN RETURN public_otp AND t IN ('restaurant_tables','outlets'); END IF; -- row locks only; trigger forbids mutation
+    IF action<>'SELECT' THEN RETURN false; END IF;
+    IF t='dining_sessions' THEN RETURN (public_otp AND (c->>'path'='/api/v1/guest/otp/request' OR r->>'id'=pali_runtime.guest_session()::text))
+      OR c->>'path'='/api/v1/guest/table/resolve' OR (c->>'path'='/api/v1/guest/menu' AND r->>'id'=pali_runtime.guest_session()::text); END IF;
+    RETURN t IN ('outlets','properties','restaurant_tables','dining_zones','menu_categories','menu_items','outlet_menu_items');
+  END IF;
+  IF m IN ('guest','guest_auth') THEN
+    IF t='guest_session_tokens' THEN RETURN r->>'token_hash'=c->>'tokenHash' AND (action='SELECT' OR (m='guest' AND action='UPDATE')); END IF;
+    IF t='dining_sessions' THEN RETURN r->>'id'=pali_runtime.guest_session()::text AND action='SELECT'; END IF;
+    IF t IN ('restaurant_tables','outlets') AND m='guest_auth' THEN RETURN action='SELECT'; END IF;
+    IF m='guest_auth' THEN RETURN false; END IF;
+    IF t='idempotency_keys' THEN RETURN o=c->>'outletId' AND r->>'actor_staff_id' IS NULL AND r->>'runtime_guest_session_id'=c->>'sessionId'; END IF;
+    IF t='restaurant_tables' THEN RETURN r->>'id'=c->>'tableId' AND action='SELECT'; END IF;
+    IF t IN ('order_items','order_status_history') THEN SELECT outlet_id,dining_session_id::text INTO o,session_id FROM public.orders WHERE id::text=r->>'order_id'; END IF;
+    IF t IN ('kot_items','kot_status_history') THEN SELECT k.outlet_id,ord.dining_session_id::text INTO o,session_id FROM public.kots k JOIN public.orders ord ON ord.id=k.order_id WHERE k.id::text=r->>'kot_id'; END IF;
+    IF t='kots' THEN SELECT dining_session_id::text INTO session_id FROM public.orders WHERE id::text=r->>'order_id'; END IF;
+    IF t='bill_items' THEN
+      SELECT outlet_id,dining_session_id::text INTO o,session_id FROM public.bills WHERE id::text=r->>'bill_id';
+      RETURN action='SELECT' AND session_id=c->>'sessionId' AND o=c->>'outletId';
+    END IF;
+    IF t IN ('orders','order_items','order_status_history','kots','kot_items','kot_status_history','service_requests','bills') THEN
+      RETURN session_id=c->>'sessionId' AND o=c->>'outletId' AND (action='SELECT' OR (action='INSERT' AND t<>'bills') OR (action='UPDATE' AND t='orders'));
+    END IF;
+    IF t='outlet_counters' THEN RETURN o=c->>'outletId' AND r->>'counter_type' IN ('DAILY_ORDER','DAILY_KOT') AND action IN ('SELECT','INSERT','UPDATE'); END IF;
+    IF t='audit_logs' THEN RETURN o=c->>'outletId' AND r->>'actor_id'=c->>'sessionId' AND r->>'actor_type' IN ('SYSTEM','CUSTOMER') AND action IN ('SELECT','INSERT'); END IF;
+    IF t='outlet_event_log' THEN RETURN o=c->>'outletId' AND action IN ('SELECT','INSERT') AND (
+      EXISTS (SELECT FROM public.orders WHERE id::text=r->>'entity_id') OR
+      EXISTS (SELECT FROM public.kots WHERE id::text=r->>'entity_id') OR
+      EXISTS (SELECT FROM public.service_requests WHERE id::text=r->>'entity_id')); END IF;
+    RETURN action='SELECT' AND (t IN ('properties','menu_categories','menu_items') OR (t IN ('outlets','outlet_menu_items','kitchen_stations','outlet_settings') AND COALESCE(o,r->>'id')=c->>'outletId'));
+  END IF;
+  IF m<>'staff' THEN RETURN false; END IF;
+  IF t IN ('roles','permissions','role_permissions') THEN RETURN action='SELECT'; END IF;
+  IF t='staff_sessions' THEN RETURN (r->>'staff_id'=c->>'staffId' OR COALESCE((c->>'superAdmin')::boolean,false)) AND action IN ('SELECT','UPDATE'); END IF;
+  IF t IN ('staff','staff_roles','staff_module_access','staff_outlet_access') THEN
+    IF action='SELECT' THEN RETURN pali_runtime.staff_visible(COALESCE(r->>'staff_id',r->>'id')::uuid); END IF;
+    RETURN COALESCE((c->>'superAdmin')::boolean,false);
+  END IF;
+  IF t='properties' THEN RETURN action='SELECT' OR COALESCE((c->>'superAdmin')::boolean,false); END IF;
+  IF t IN ('menu_categories','menu_items') THEN
+    RETURN action='SELECT' OR (COALESCE((c->>'superAdmin')::boolean,false) OR p ?| ARRAY['menu:edit','menu:approve_revisions']);
+  END IF;
+  IF t IN ('order_items','order_status_history') THEN SELECT outlet_id INTO o FROM public.orders WHERE id::text=r->>'order_id'; END IF;
+  IF t IN ('kot_items','kot_status_history') THEN SELECT outlet_id INTO o FROM public.kots WHERE id::text=r->>'kot_id'; END IF;
+  IF t='bill_items' THEN SELECT outlet_id INTO o FROM public.bills WHERE id::text=r->>'bill_id'; END IF;
+  IF t IN ('payment_allocations','refunds') THEN SELECT outlet_id INTO o FROM public.payments WHERE id::text=r->>'payment_id'; END IF;
+  IF t='guest_session_tokens' THEN SELECT outlet_id INTO o FROM public.dining_sessions WHERE id::text=r->>'dining_session_id'; END IF;
+  IF t='approval_actions' THEN SELECT outlet_id INTO o FROM public.approval_requests WHERE id::text=r->>'request_id'; END IF;
+  IF t='menu_revision_approvals' THEN SELECT outlet_id INTO o FROM public.menu_item_revisions WHERE id::text=r->>'revision_id'; END IF;
+  IF t='table_assignment_history' THEN SELECT outlet_id INTO o FROM public.restaurant_tables WHERE id::text=r->>'table_id'; END IF;
+  IF t='outlets' THEN o:=r->>'id'; END IF;
+  IF t IN ('order_items','order_status_history','kot_items','kot_status_history','bill_items','payment_allocations','refunds','approval_actions','table_assignment_history','guest_session_tokens') AND o IS NULL THEN RETURN false; END IF;
+  IF t='customers' AND action='SELECT' THEN RETURN COALESCE((c->>'globalOutlets')::boolean,false) OR EXISTS (SELECT FROM public.dining_sessions ds WHERE ds.customer_id::text=r->>'id'); END IF;
+  IF t='menu_item_revisions' AND o IS NULL AND NOT EXISTS (SELECT FROM pali_runtime.catalog_outlets((r->>'menu_item_id')::uuid)) THEN RETURN false; END IF;
+  IF o IS NOT NULL AND NOT COALESCE((c->>'globalOutlets')::boolean,false) AND NOT (COALESCE(c->'outlets','[]'::jsonb) ? o) THEN RETURN false; END IF;
+  IF o IS NOT NULL AND c->>'scope' IS NOT NULL AND o<>c->>'scope' THEN RETURN false; END IF;
+  IF action='SELECT' THEN RETURN o IS NOT NULL OR t IN ('customers','menu_item_revisions','menu_revision_approvals','discount_reason_codes','audit_logs','idempotency_keys'); END IF;
+  IF COALESCE((c->>'superAdmin')::boolean,false) THEN RETURN true; END IF;
+  IF t IN ('outlets','outlet_settings') THEN RETURN false; END IF;
+  IF t='payments' AND action='INSERT' OR t='payment_allocations' THEN needs:=ARRAY['payment:process','bill:settle'];
+  ELSIF t='payments' THEN needs:=ARRAY['payment:process','bill:settle','payment:refund'];
+  ELSIF t='refunds' THEN needs:=ARRAY['payment:refund'];
+  ELSIF t='bills' AND action='INSERT' THEN needs:=ARRAY['bill:generate'];
+  ELSIF t IN ('bills','bill_items') THEN needs:=ARRAY['bill:generate','bill:apply_discount','bill:void','bill:settle','payment:process','payment:refund'];
+  ELSIF t='approval_requests' AND action='INSERT' THEN needs:=ARRAY['bill:apply_discount'];
+  ELSIF t IN ('approval_requests','approval_actions','discount_reason_codes') THEN needs:=ARRAY['bill:approve_discount'];
+  ELSIF t='menu_revision_approvals' OR t='menu_item_revisions' AND action='UPDATE' THEN needs:=ARRAY['menu:approve_revisions'];
+  ELSIF t IN ('outlet_menu_items','menu_item_revisions') THEN needs:=ARRAY['menu:edit','menu:approve_revisions'];
+  ELSIF t='restaurant_tables' AND action='INSERT' THEN needs:=ARRAY['table:manage'];
+  ELSIF t IN ('restaurant_tables','dining_sessions','service_requests','guest_session_tokens') THEN needs:=ARRAY['table:manage','table:assign','bill:settle','payment:process','order:create','order:cancel'];
+  ELSIF t='table_assignment_history' THEN needs:=ARRAY['table:manage','table:assign'];
+  ELSIF t='outlet_counters' AND r->>'counter_type'='INVOICE' THEN needs:=ARRAY['bill:generate'];
+  ELSIF t IN ('orders','order_items','kots','kot_items') AND action='INSERT' THEN needs:=ARRAY['order:create','order:counter_create','kds:update'];
+  ELSIF t IN ('orders','order_items','order_status_history','kots','kot_items','kot_status_history','outlet_counters') THEN needs:=ARRAY['order:create','order:counter_create','order:update','order:serve','order:cancel','kds:update'];
+  ELSIF t='customers' THEN needs:=ARRAY['table:manage','table:assign','order:create'];
+  ELSIF t IN ('audit_logs','outlet_event_log','idempotency_keys') THEN RETURN true;
+  ELSE RETURN false;
+  END IF;
+  RETURN p ?| needs;
+END $function$
+
+
+CREATE OR REPLACE FUNCTION pali_runtime.check_write()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SET search_path TO 'pg_catalog'
+AS $function$
+DECLARE c jsonb; r jsonb:=to_jsonb(NEW); o text:=r->>'outlet_id'; parent text; foreign_id text;
+BEGIN
+  IF NOT pg_has_role(current_user,'pali_runtime','usage') OR
+    EXISTS (SELECT FROM pg_roles WHERE rolname=current_user AND rolsuper) THEN RETURN NEW; END IF;
+  c := pali_runtime.context();
+  IF TG_OP='UPDATE' AND NOT pali_runtime.access(TG_TABLE_NAME,'WRITE',r) THEN
+    RAISE EXCEPTION 'Runtime mutation permission denied' USING ERRCODE='42501';
+  END IF;
+  IF TG_TABLE_NAME='menu_items' AND TG_OP='UPDATE' THEN
+    IF (SELECT count(*) FROM pali_runtime.catalog_outlets((r->>'id')::uuid))>1 AND NOT EXISTS (
+      SELECT FROM public.menu_item_revisions mr JOIN public.menu_revision_approvals ma ON ma.revision_id=mr.id
+      WHERE mr.menu_item_id=NEW.id AND mr.outlet_id IS NULL AND mr.status='PENDING'
+      AND ma.action='APPROVED' AND ma.reviewed_by_staff_id::text=c->>'staffId'
+      AND mr.submitted_by_staff_id<>ma.reviewed_by_staff_id) THEN
+    RAISE EXCEPTION 'Shared master requires independent pending approval' USING ERRCODE='42501';
+    END IF;
+  END IF;
+  IF c->>'mode'='public' AND TG_TABLE_NAME NOT IN ('customers','guest_session_tokens') THEN RAISE EXCEPTION 'Public capability cannot mutate this table' USING ERRCODE='42501'; END IF;
+  IF c->>'mode'='staff' AND TG_TABLE_NAME='staff_sessions' AND TG_OP='UPDATE' THEN
+    IF r->>'revoked_at' IS NULL OR (to_jsonb(OLD)-'revoked_at') IS DISTINCT FROM (r-'revoked_at') THEN
+      RAISE EXCEPTION 'Runtime may only revoke existing staff sessions' USING ERRCODE='42501';
+    END IF;
+  END IF;
+  IF TG_TABLE_NAME='payments' AND TG_OP='UPDATE' AND
+    (to_jsonb(OLD)-ARRAY['status','updated_at']) IS DISTINCT FROM (r-ARRAY['status','updated_at']) THEN
+    RAISE EXCEPTION 'Captured payment facts are immutable' USING ERRCODE='42501';
+  END IF;
+  IF c->>'mode'='guest' THEN
+    IF TG_TABLE_NAME='orders' AND TG_OP='UPDATE' THEN
+      IF to_jsonb(OLD)->>'status'<>'PLACED' OR r->>'status'<>'ACCEPTED' OR
+        (to_jsonb(OLD)-ARRAY['status','updated_at']) IS DISTINCT FROM (r-ARRAY['status','updated_at']) THEN
+        RAISE EXCEPTION 'Guest cannot change order lifecycle or contents' USING ERRCODE='42501';
+      END IF;
+    ELSIF TG_TABLE_NAME='guest_session_tokens' AND TG_OP='UPDATE' THEN
+      IF r->>'is_revoked'<>'true' OR (to_jsonb(OLD)-'is_revoked') IS DISTINCT FROM (r-'is_revoked') THEN
+        RAISE EXCEPTION 'Guest may only revoke its own token' USING ERRCODE='42501';
+      END IF;
+    END IF;
+  END IF;
+  IF TG_TABLE_NAME='staff' AND c->>'mode' IN ('login','login_success') AND
+    (to_jsonb(OLD)-ARRAY['password_failed_attempts','password_locked_until','updated_at']) IS DISTINCT FROM
+    (r-ARRAY['password_failed_attempts','password_locked_until','updated_at']) THEN
+    RAISE EXCEPTION 'Login may only update lockout counters' USING ERRCODE='42501';
+  END IF;
+  IF c->>'mode'='staff' AND ((TG_TABLE_NAME='audit_logs' AND (r->>'actor_type' IS DISTINCT FROM 'STAFF' OR r->>'actor_id' IS DISTINCT FROM c->>'staffId'))
+    OR (TG_TABLE_NAME='idempotency_keys' AND r->>'actor_staff_id' IS DISTINCT FROM c->>'staffId')) THEN
+    RAISE EXCEPTION 'Actor mismatch' USING ERRCODE='42501';
+  END IF;
+  IF TG_TABLE_NAME='payment_allocations' THEN
+    SELECT p.outlet_id INTO o FROM public.payments p WHERE p.id::text=r->>'payment_id';
+    SELECT b.outlet_id INTO parent FROM public.bills b WHERE b.id::text=r->>'bill_id';
+    IF o IS NULL OR parent IS DISTINCT FROM o THEN RAISE EXCEPTION 'Cross-outlet allocation denied' USING ERRCODE='42501'; END IF;
+    parent:=NULL;
+  ELSIF TG_TABLE_NAME='bill_items' THEN
+    SELECT b.outlet_id INTO o FROM public.bills b WHERE b.id::text=r->>'bill_id';
+    SELECT ord.outlet_id INTO parent FROM public.order_items oi JOIN public.orders ord ON ord.id=oi.order_id WHERE oi.id::text=r->>'order_item_id';
+    IF o IS NULL OR parent IS DISTINCT FROM o THEN RAISE EXCEPTION 'Cross-outlet invoice line denied' USING ERRCODE='42501'; END IF;
+    parent:=NULL;
+  ELSIF TG_TABLE_NAME='kot_items' THEN
+    SELECT k.order_id::text INTO o FROM public.kots k WHERE k.id::text=r->>'kot_id';
+    SELECT oi.order_id::text INTO parent FROM public.order_items oi WHERE oi.id::text=r->>'order_item_id';
+    IF o IS NULL OR parent IS DISTINCT FROM o THEN RAISE EXCEPTION 'Cross-order kitchen line denied' USING ERRCODE='42501'; END IF;
+    o:=r->>'outlet_id';parent:=NULL;
+  END IF;
+  IF TG_TABLE_NAME='restaurant_tables' AND r->>'active_dining_session_id' IS NOT NULL AND NOT EXISTS (
+    SELECT FROM public.dining_sessions ds WHERE ds.id::text=r->>'active_dining_session_id'
+      AND ds.outlet_id=r->>'outlet_id' AND ds.table_id::text=r->>'id') THEN
+    RAISE EXCEPTION 'Cross-table sitting pointer denied' USING ERRCODE='42501';
+  END IF;
+  -- Foreign keys alone do not guarantee that the parent belongs to the same outlet.
+  IF TG_TABLE_NAME='restaurant_tables' THEN parent:='dining_zones'; foreign_id:=r->>'zone_id';
+  ELSIF TG_TABLE_NAME IN ('dining_sessions','service_requests') THEN parent:='restaurant_tables'; foreign_id:=r->>'table_id';
+  ELSIF TG_TABLE_NAME='orders' THEN parent:='dining_sessions'; foreign_id:=r->>'dining_session_id';
+  ELSIF TG_TABLE_NAME='kots' THEN parent:='orders'; foreign_id:=r->>'order_id';
+  ELSIF TG_TABLE_NAME='payments' THEN parent:='bills'; foreign_id:=r->>'bill_id';
+  ELSIF TG_TABLE_NAME='bills' THEN parent:='dining_sessions'; foreign_id:=r->>'dining_session_id';
+  END IF;
+  IF parent IS NOT NULL AND foreign_id IS NOT NULL THEN
+    IF NOT EXISTS (SELECT FROM jsonb_array_elements_text(COALESCE(c->'outlets','[]'::jsonb)) x WHERE x.value=o)
+      AND c->>'mode'='staff' AND NOT COALESCE((c->>'globalOutlets')::boolean,false) THEN
+      RAISE EXCEPTION 'Parent outlet denied' USING ERRCODE='42501';
+    END IF;
+    EXECUTE format('SELECT outlet_id FROM public.%I WHERE id::text=$1',parent) INTO parent USING foreign_id;
+    IF parent IS DISTINCT FROM o THEN RAISE EXCEPTION 'Cross-outlet parent denied' USING ERRCODE='42501'; END IF;
+  END IF;
+  RETURN NEW;
+END $function$
+

@@ -1,0 +1,745 @@
+import React, { useState } from 'react';
+import { useApp } from '../../context/AppContext';
+import { checkRouteAccess, getDefaultDashboardRoute } from '../../utils/rbac';
+import { FEATURES } from '../../config/features';
+import { countActiveStationTickets } from '../../utils/kitchenStation';
+import { scopeServiceTables } from '../../views/waiter/waiterHelpers';
+import {
+  UtensilsCrossed,
+  Hotel,
+  CookingPot,
+  CreditCard,
+  UserSquare2,
+  Sparkles,
+  Package,
+  Users,
+  HeartHandshake,
+  FileBarChart,
+  Settings,
+  Building2,
+  ChevronRight,
+  ChevronDown,
+  X,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Compass,
+  CalendarDays,
+  Wrench,
+  Truck,
+  ClipboardList,
+  Trash2,
+  Clock,
+  ShieldAlert,
+  UserCheck,
+  Star,
+  AlertCircle,
+  BarChart3,
+  TrendingUp,
+  History,
+  Store,
+  Layers,
+  HelpCircle,
+  User,
+  LogOut,
+  LayoutDashboard,
+  BellRing,
+  Receipt,
+  CheckCircle2,
+  ChefHat,
+  Smartphone,
+  Wine,
+  Coffee,
+  Beer,
+  ConciergeBell
+} from 'lucide-react';
+import { ProfileModal } from './ProfileModal';
+
+interface SidebarProps {
+  isMobileOpen?: boolean;
+  isDesktopOpen?: boolean;
+  isOpen?: boolean; // backwards-compatible alias
+  onClose?: () => void;
+  onToggleDesktop?: () => void;
+}
+
+interface NavItem {
+  title: string;
+  path: string;
+  badge?: string | number;
+  icon?: any;
+}
+
+interface NavGroup {
+  id: string;
+  title: string;
+  icon: any;
+  items: NavItem[];
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({
+  isMobileOpen = false,
+  isDesktopOpen = true,
+  isOpen,
+  onClose,
+  onToggleDesktop
+}) => {
+  const {
+    currentRoute,
+    pushRoute,
+    currentUser,
+    effectiveRole,
+    activeRestaurantId,
+    kitchenTickets,
+    waiterRequests,
+    inventory,
+    tables,
+    orders,
+    notifications,
+    logout,
+    openTour
+  } = useApp();
+
+  // Resolved mobile visibility: respects isOpen if provided, otherwise isMobileOpen
+  // Waiter uses bottom mobile navigation, so mobile sidebar navigation is disabled for waiter role
+  const isWaiter = effectiveRole === 'WAITER';
+  const mobileOpen = !isWaiter && (isOpen !== undefined ? isOpen : isMobileOpen);
+
+  // Active tickets & warnings for badges
+  const stationCount = (station = 'all') => countActiveStationTickets(kitchenTickets, activeRestaurantId, effectiveRole, station);
+  const pendingKds = stationCount();
+  const serviceTables = currentUser ? scopeServiceTables(tables, activeRestaurantId, currentUser) : [];
+  const pendingRequests = waiterRequests.filter(r => r.status === 'pending').length;
+  const lowStockCount = inventory.filter(i => i.status === 'low-stock').length;
+
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    'waiter-floor-ops': true,
+    'waiter-ops': true,
+    'fb-ops': true,
+    'hospitality': true,
+    'inventory': true,
+    'people': true,
+    'guest-exp': true,
+    'financials': true,
+    'enterprise': true
+  });
+
+  const [hoveredCollapsedGroup, setHoveredCollapsedGroup] = useState<string | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const toggleGroup = (id: string) => {
+    setExpandedGroups(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleNavigate = (path: string) => {
+    pushRoute(path);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      onClose?.();
+    }
+  };
+
+  // Restaurant ER: display-only placeholders; functionality to be added later.
+  const [restaurantMasterOpen, setRestaurantMasterOpen] = useState(true);
+
+  const restaurantMasterItems = [
+    { title: 'Designation', path: null, icon: Users },
+    { title: 'Staff', path: '/staff/dashboard', icon: Users },
+    { title: 'Area', path: '/restaurant/areas', icon: Store },
+    { title: 'Table', path: '/restaurant/tables', icon: Store },
+    { title: 'Products', path: '/restaurant/menu', icon: Layers }
+  ];
+
+  // Structured Operational Groups as specified in Section 5
+  const navGroups: NavGroup[] = [
+    {
+      id: 'kitchen-ops',
+      title: 'KITCHEN OPERATIONS',
+      icon: ChefHat,
+      items: [
+        {
+          title: 'Executive Kitchen',
+          path: '/kitchen/executive',
+          icon: LayoutDashboard,
+          badge: stationCount() || undefined
+        },
+        {
+          title: 'Cooking KDS',
+          path: '/kitchen/kds/cooking',
+          icon: CookingPot,
+          badge: stationCount('cooking') || undefined
+        },
+        {
+          title: 'Bar KDS',
+          path: '/kitchen/kds/bar',
+          icon: Wine,
+          badge: stationCount('bar') || undefined
+        },
+        {
+          title: 'Beverages Station',
+          path: '/kitchen/beverages',
+          icon: Coffee,
+          badge: stationCount('beverages') || undefined
+        },
+        {
+          title: 'Drinks Station',
+          path: '/kitchen/drinks',
+          icon: Beer,
+          badge: stationCount('drinks') || undefined
+        },
+        {
+          title: 'Active Orders',
+          path: '/kitchen/active',
+          icon: ClipboardList,
+          badge: stationCount() || undefined
+        },
+        {
+          title: 'Completed Orders',
+          path: '/kitchen/completed',
+          icon: CheckCircle2
+        }
+      ]
+    },
+    {
+      id: 'waiter-floor-ops',
+      title: 'WAITER OPERATIONS',
+      icon: ConciergeBell,
+      items: [
+        {
+          title: 'Punch Order / Tables',
+          path: '/waiter/dashboard',
+          icon: Store,
+          badge: serviceTables.filter(t => t.status === 'occupied').length || undefined
+        },
+        {
+          title: 'Notifications',
+          path: '/waiter/notifications',
+          icon: BellRing,
+          badge: notifications.filter(n => !n.read && (n.targetRoles?.includes('WAITER') || n.title?.includes('READY') || n.title?.includes('QR'))).length || undefined
+        }
+      ]
+    },
+    {
+      id: 'waiter-ops',
+      title: 'CAPTAIN',
+      icon: UserSquare2,
+      items: [
+        { title: 'Overview', path: '/waiter/dashboard', icon: LayoutDashboard },
+        { title: 'Server Visibility', path: '/waiter/roster', icon: Users },
+        { title: 'My Tables', path: '/waiter/tables', icon: Store, badge: tables.filter(t => t.restaurantId === activeRestaurantId && t.status === 'occupied').length || undefined },
+        { title: 'Active Orders', path: '/waiter/orders', icon: ClipboardList, badge: orders.filter(o => o.restaurantId === activeRestaurantId && o.status !== 'completed' && o.status !== 'cancelled').length || undefined },
+        { title: 'Service Calls', path: '/waiter/requests', icon: BellRing, badge: pendingRequests > 0 ? pendingRequests : undefined },
+        { title: 'Bills', path: '/waiter/bills', icon: Receipt, badge: tables.filter(t => t.restaurantId === activeRestaurantId && t.status === 'billed').length || undefined },
+        { title: 'Profile', path: '/waiter/profile', icon: User }
+      ]
+    },
+    {
+      id: 'fb-ops',
+      title: 'F&B OPERATIONS',
+      icon: UtensilsCrossed,
+      items: [
+        { title: 'Restaurant & Dining', path: '/restaurant/dashboard', icon: UtensilsCrossed },
+        { title: 'Tables', path: '/restaurant/tables', icon: Store },
+        { title: 'Orders', path: '/restaurant/orders', icon: ClipboardList },
+        { title: 'Menu', path: '/restaurant/menu', icon: Layers },
+        { title: 'Kitchen & KDS', path: '/kitchen/dashboard', badge: pendingKds > 0 ? pendingKds : undefined, icon: CookingPot },
+        { title: 'Waiter & Services', path: '/waiter/dashboard', badge: pendingRequests > 0 ? pendingRequests : undefined, icon: UserSquare2 },
+        { title: 'Billing', path: '/cashier/dashboard', icon: CreditCard },
+        { title: 'Table QR Studio', path: '/restaurant/qr-ordering', icon: Smartphone }
+      ]
+    },
+    {
+      id: 'hospitality',
+      title: 'HOSPITALITY & ROOMS',
+      icon: Hotel,
+      items: [
+        { title: 'Front Desk', path: '/reception/dashboard', icon: Building2 },
+        { title: 'Reservations', path: '/hotel/reservations', icon: CalendarDays },
+        { title: 'Housekeeping', path: '/housekeeping/dashboard', icon: Sparkles },
+        { title: 'Maintenance', path: '/housekeeping/maintenance', icon: Wrench }
+      ]
+    },
+    {
+      id: 'inventory',
+      title: 'INVENTORY & PROCUREMENT',
+      icon: Package,
+      items: [
+        { title: 'Inventory', path: '/inventory/dashboard', badge: lowStockCount > 0 ? `${lowStockCount} Low` : undefined, icon: Package },
+        { title: 'Suppliers', path: '/inventory/suppliers', icon: Truck },
+        { title: 'Purchase Orders', path: '/inventory/purchase-orders', icon: ClipboardList },
+        { title: 'Waste', path: '/inventory/waste', icon: Trash2 }
+      ]
+    },
+    {
+      id: 'people',
+      title: 'PEOPLE',
+      icon: Users,
+      items: [
+        { title: 'Staff', path: '/staff/dashboard', icon: Users },
+        { title: 'Attendance', path: '/staff/attendance', icon: Clock },
+        { title: 'Roles & Permissions', path: '/roles', icon: ShieldAlert }
+      ]
+    },
+    {
+      id: 'guest-exp',
+      title: 'GUEST EXPERIENCE',
+      icon: HeartHandshake,
+      items: [
+        { title: 'CRM', path: '/crm/dashboard', icon: HeartHandshake },
+        { title: 'Guest Profiles', path: '/crm/customers', icon: UserCheck },
+        { title: 'Reviews', path: '/crm/reviews', icon: Star },
+        { title: 'Complaints', path: '/crm/complaints', icon: AlertCircle }
+      ]
+    },
+    {
+      id: 'financials',
+      title: 'FINANCIALS & REPORTING',
+      icon: FileBarChart,
+      items: [
+        { title: 'Reports', path: '/reports/dashboard', icon: FileBarChart },
+        { title: 'Revenue', path: '/reports/sales', icon: TrendingUp },
+        { title: 'Sales', path: '/reports/restaurant', icon: BarChart3 },
+        { title: 'Occupancy', path: '/reports/hotel', icon: Hotel },
+        { title: 'Audit Logs', path: '/audit-logs', icon: History }
+      ]
+    },
+    {
+      id: 'enterprise',
+      title: 'ENTERPRISE',
+      icon: Settings,
+      items: [
+        { title: 'Restaurants', path: '/settings/outlets', icon: Store },
+        { title: 'Departments', path: '/staff/departments', icon: Layers },
+        { title: 'Users', path: '/users', icon: Users },
+        { title: 'Module Access', path: '/settings/module-access', icon: ShieldAlert },
+        { title: 'System Settings', path: '/settings', icon: Settings }
+      ]
+    }
+  ];
+
+  // Filter nav groups by feature flags (ROOM_SERVICE, CRM, DINING_RESERVATIONS)
+  const enabledNavGroups: NavGroup[] = navGroups
+    .map(group => {
+      if (group.id === 'guest-exp' && !FEATURES.CRM) {
+        return null;
+      }
+      const filteredItems = group.items.filter(item => {
+        if (item.path.startsWith('/crm') && !FEATURES.CRM) return false;
+        if (item.path.startsWith('/room-service') && !FEATURES.ROOM_SERVICE) return false;
+        if (item.path === '/restaurant/reservations' && !FEATURES.DINING_RESERVATIONS) return false;
+        return true;
+      });
+      return {
+        ...group,
+        items: filteredItems
+      };
+    })
+    .filter((g): g is NavGroup => g !== null && g.items.length > 0);
+
+  // Effective Module Access & RBAC Group Visibility Scoping
+  const visibleGroups = enabledNavGroups.filter(group => {
+    if (effectiveRole === 'SUPER_ADMIN') {
+      return true;
+    }
+
+    if (effectiveRole === 'WAITER' && group.id !== 'waiter-floor-ops') return false;
+    if (effectiveRole === 'WAITER_MANAGER' && group.id !== 'waiter-ops') return false;
+    if (['KITCHEN_COOKING','KITCHEN_BAR','KITCHEN_EXECUTIVE','BEVERAGES','DRINKS','KITCHEN_USER','KITCHEN_STAFF'].includes(effectiveRole) && group.id !== 'kitchen-ops') return false;
+    // Dynamic visibility: show group if at least one item is accessible via effective access
+    return group.items.some(item => checkRouteAccess(item.path, effectiveRole, currentUser).allowed);
+  });
+
+  const isSuperAdmin = effectiveRole === 'SUPER_ADMIN';
+
+  return (
+    <>
+      {/* Mobile Backdrop */}
+      {mobileOpen && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-[#163024]/60 backdrop-blur-xs lg:hidden transition-opacity"
+        />
+      )}
+
+      {/* Main Sidebar Container */}
+      <aside
+        id="app-sidebar"
+        className={`fixed top-0 bottom-0 left-0 z-40 bg-white border-r border-[#DDD8C9] flex flex-col transition-all duration-300 ease-in-out ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        } ${
+          isDesktopOpen ? 'lg:translate-x-0 lg:w-72' : 'lg:translate-x-0 lg:w-20'
+        }`}
+      >
+        {/* Brand Header */}
+        <div className="h-18 border-b border-[#244737] px-3.5 flex items-center justify-between bg-[#163024] text-[#F7F4EC] shrink-0">
+          <div
+            onClick={() => handleNavigate(getDefaultDashboardRoute(effectiveRole))}
+            className="flex items-center gap-2.5 cursor-pointer select-none group min-w-0 flex-1"
+          >
+            {isDesktopOpen ? (
+              <div className="bg-white px-3 py-1.5 rounded-xl shadow-sm border border-[#DDD8C9] flex items-center justify-center transition-all group-hover:shadow-md max-w-[200px]">
+                <img
+                  src="/palilogo.png"
+                  alt="Pali Resort & Club • Pali Village"
+                  className="h-9 w-auto max-w-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            ) : (
+              <div className="w-11 h-11 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm border border-[#C5A86A]/40 overflow-hidden shrink-0 mx-auto group-hover:scale-105 transition-transform">
+                <img
+                  src="/palilogo.png"
+                  alt="Pali Resort & Club"
+                  className="w-full h-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Subtle Collapse Button */}
+          <div className="hidden lg:flex items-center">
+            {onToggleDesktop && (
+              <button
+                id="btn-sidebar-collapse"
+                onClick={onToggleDesktop}
+                title={isDesktopOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+                aria-label={isDesktopOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+                className="p-1.5 rounded-lg text-[#DDD8C9] hover:text-[#F7F4EC] hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                {isDesktopOpen ? (
+                  <PanelLeftClose className="w-4 h-4" />
+                ) : (
+                  <PanelLeftOpen className="w-4 h-4" />
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* Mobile Close Button */}
+          <button
+            id="btn-close-sidebar"
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-[#DDD8C9] hover:text-white hover:bg-white/10 lg:hidden transition-colors cursor-pointer"
+            aria-label="Close navigation sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Super Admin / Executive Top Anchor */}
+        {isSuperAdmin && (
+          <div className="p-2 border-b border-[#DDD8C9] bg-[#F7F4EC]/60">
+            <button
+              onClick={() => handleNavigate('/super-admin/dashboard')}
+              title={!isDesktopOpen ? 'Executive 360° Overview' : undefined}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${
+                currentRoute === '/super-admin/dashboard' || currentRoute === '/super-admin'
+                  ? 'bg-[#163024] text-[#F7F4EC] shadow-xs'
+                  : 'text-[#163024] hover:bg-[#163024]/10 bg-white border border-[#DDD8C9]'
+              } ${!isDesktopOpen ? 'justify-center px-2' : ''}`}
+            >
+              <Compass className={`w-4 h-4 shrink-0 ${
+                currentRoute === '/super-admin/dashboard' ? 'text-[#C5A86A]' : 'text-[#163024]'
+              }`} />
+              {isDesktopOpen && (
+                <div className="flex-1 flex items-center justify-between">
+                  <span>Executive 360° Overview</span>
+                  <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#C5A86A] text-[#163024] font-black">
+                    CORE
+                  </span>
+                </div>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Navigation List */}
+        <nav className="flex-1 overflow-y-auto px-2.5 py-3 space-y-3 scrollbar-thin">
+          {/* Restaurant ER: Dashboard and expandable Master */}
+          {checkRouteAccess('/restaurant/dashboard', effectiveRole, currentUser).allowed && (
+            <div className="space-y-1 pb-3 border-b border-[#DDD8C9]">
+              {isDesktopOpen && (
+                <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-[#647568]">
+                  RESTAURANT ER
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={() => handleNavigate('/restaurant/dashboard')}
+                aria-current={currentRoute === '/restaurant/dashboard' ? 'page' : undefined}
+                title={!isDesktopOpen ? 'Dashboard' : undefined}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-left transition-all cursor-pointer ${
+                  currentRoute === '/restaurant/dashboard'
+                    ? 'bg-[#163024] text-[#F7F4EC]'
+                    : 'text-[#163024] hover:bg-[#163024]/10'
+                } ${!isDesktopOpen ? 'justify-center' : ''}`}
+              >
+                <LayoutDashboard className="w-4 h-4 shrink-0" />
+                {isDesktopOpen && <span>Dashboard</span>}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setRestaurantMasterOpen(v => !v)}
+                aria-expanded={restaurantMasterOpen}
+                title={!isDesktopOpen ? 'Master' : undefined}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-left text-[#163024] hover:bg-[#163024]/10 transition-all cursor-pointer ${
+                  !isDesktopOpen ? 'justify-center' : ''
+                }`}
+              >
+                <Layers className="w-4 h-4 shrink-0" />
+                {isDesktopOpen && (
+                  <>
+                    <span className="flex-1">Master</span>
+                    <span className="text-sm">
+                      {restaurantMasterOpen ? '⌄' : '›'}
+                    </span>
+                  </>
+                )}
+              </button>
+
+              {restaurantMasterOpen && (
+                <div className={isDesktopOpen ? 'ml-4 pl-2 border-l border-[#DDD8C9] space-y-1' : 'space-y-1'}>
+                  {restaurantMasterItems.map(item => {
+                    const path = item.path;
+                    const allowed = path
+                      ? checkRouteAccess(path, effectiveRole, currentUser).allowed
+                      : false;
+                    const active = !!path && currentRoute === path;
+                    const ItemIcon = item.icon;
+
+                    return (
+                      <button
+                        key={item.title}
+                        type="button"
+                        disabled={!allowed}
+                        onClick={() => {
+                          if (path && allowed) handleNavigate(path);
+                        }}
+                        aria-current={active ? 'page' : undefined}
+                        title={!isDesktopOpen ? item.title : undefined}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-all ${
+                          active
+                            ? 'bg-[#163024] text-[#F7F4EC]'
+                            : allowed
+                              ? 'text-[#244737] hover:bg-[#163024]/10 cursor-pointer'
+                              : 'text-slate-400 cursor-not-allowed'
+                        } ${!isDesktopOpen ? 'justify-center' : ''}`}
+                      >
+                        <ItemIcon className="w-4 h-4 shrink-0" />
+                        {isDesktopOpen && <span>{item.title}</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {visibleGroups.map(group => {
+            const allowedItems = group.items.filter(i => checkRouteAccess(i.path, effectiveRole, currentUser).allowed);
+            if (allowedItems.length === 0) return null;
+
+            const isExpanded = !!expandedGroups[group.id];
+            const GroupIcon = group.icon;
+            const hasActiveChild = allowedItems.some(
+              i => currentRoute === i.path || currentRoute.startsWith(i.path + '/')
+            );
+
+            // Collapsed Mode on Desktop
+            if (!isDesktopOpen) {
+              return (
+                <div
+                  key={group.id}
+                  className="relative flex justify-center py-1"
+                  onMouseEnter={() => setHoveredCollapsedGroup(group.id)}
+                  onMouseLeave={() => setHoveredCollapsedGroup(null)}
+                >
+                  <button
+                    onClick={() => {
+                      if (allowedItems[0]) handleNavigate(allowedItems[0].path);
+                    }}
+                    title={group.title}
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                      hasActiveChild
+                        ? 'bg-[#163024] text-[#F7F4EC] shadow-xs ring-2 ring-[#C5A86A]/40'
+                        : 'text-[#526B4A] hover:bg-[#F7F4EC] hover:text-[#163024]'
+                    }`}
+                  >
+                    <GroupIcon className="w-5 h-5" />
+                  </button>
+
+                  {/* Collapsed Tooltip Flyout */}
+                  {hoveredCollapsedGroup === group.id && (
+                    <div className="absolute left-14 top-0 z-50 w-56 bg-white rounded-xl shadow-xl border border-[#DDD8C9] p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#163024] border-b border-[#DDD8C9]">
+                        {group.title}
+                      </div>
+                      <div className="space-y-0.5 pt-1">
+                        {allowedItems.map(item => {
+                          const isActive =
+                            currentRoute === item.path ||
+                            (item.path !== '/' && item.path !== '/settings' && currentRoute.startsWith(item.path + '/'));
+                          const ItemIcon = item.icon || GroupIcon;
+                          return (
+                            <button
+                              key={`${group.id}-${item.title}-${item.path}`}
+                              onClick={() => handleNavigate(item.path)}
+                              className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-xs transition-colors text-left ${
+                                isActive
+                                  ? 'bg-[#163024]/10 text-[#163024] font-bold'
+                                  : 'text-[#1D241F] hover:bg-[#F7F4EC]'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 truncate">
+                                <ItemIcon className="w-3.5 h-3.5 text-[#526B4A]" />
+                                <span className="truncate">{item.title}</span>
+                              </div>
+                              {item.badge && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-[#C5A86A]/20 text-[#163024] rounded-full">
+                                  {item.badge}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Expanded Mode on Desktop & Mobile
+            return (
+              <div key={group.id} className="space-y-1">
+                {/* Group Header Button */}
+                <button
+                  onClick={() => toggleGroup(group.id)}
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                    hasActiveChild
+                      ? 'text-[#163024] bg-[#163024]/8'
+                      : 'text-[#687067] hover:text-[#163024] hover:bg-[#F7F4EC]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <GroupIcon className={`w-3.5 h-3.5 ${hasActiveChild ? 'text-[#163024]' : 'text-[#526B4A]'}`} />
+                    <span>{group.title}</span>
+                  </div>
+                  {isExpanded ? (
+                    <ChevronDown className="w-3.5 h-3.5 text-[#687067]" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 text-[#687067]" />
+                  )}
+                </button>
+
+                {/* Sub-Items List */}
+                {isExpanded && (
+                  <div className="space-y-0.5 pl-2 pt-0.5">
+                    {allowedItems.map(item => {
+                      const isActive =
+                        currentRoute === item.path ||
+                        (item.path !== '/' && item.path !== '/settings' && currentRoute.startsWith(item.path + '/'));
+                      const ItemIcon = item.icon || GroupIcon;
+
+                      return (
+                        <button
+                          key={`${group.id}-${item.title}-${item.path}`}
+                          onClick={() => handleNavigate(item.path)}
+                          className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-all text-left cursor-pointer ${
+                            isActive
+                              ? 'bg-[#163024]/10 text-[#163024] font-bold shadow-xs'
+                              : 'text-[#1D241F] hover:text-[#163024] hover:bg-[#F7F4EC]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <ItemIcon
+                              className={`w-4 h-4 shrink-0 transition-colors ${
+                                isActive ? 'text-[#163024]' : 'text-[#526B4A]'
+                              }`}
+                            />
+                            <span className="truncate">{item.title}</span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                            {isActive && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A86A]" />
+                            )}
+                            {item.badge && (
+                              <span
+                                className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                                  isActive
+                                    ? 'bg-[#163024] text-[#F7F4EC]'
+                                    : 'bg-[#C5A86A]/25 text-[#163024]'
+                                }`}
+                              >
+                                {item.badge}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+
+        {/* Profile & Logout Section */}
+        <div className="px-3 py-2 border-t border-[#DDD8C9] bg-white space-y-1 shrink-0">
+          <button
+            onClick={() => openTour()}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#163024] hover:bg-[#F7F4EC] transition-colors cursor-pointer group"
+            title="Start Platform Onboarding Tour"
+          >
+            <Compass className="w-4 h-4 text-[#C5A86A] group-hover:rotate-45 transition-transform duration-300" />
+            {isDesktopOpen && <span>Guided Tour</span>}
+          </button>
+          <button
+            onClick={() => setShowProfileModal(true)}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#163024] hover:bg-[#F7F4EC] transition-colors cursor-pointer"
+            title="View Profile"
+          >
+            <User className="w-4 h-4 text-[#526B4A]" />
+            {isDesktopOpen && <span>Profile</span>}
+          </button>
+          <button
+            onClick={() => logout()}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#C53030] hover:bg-[#C53030]/10 transition-colors cursor-pointer"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4 text-[#C53030]" />
+            {isDesktopOpen && <span>Logout</span>}
+          </button>
+        </div>
+
+        {/* Footer Profile & Connection Status */}
+        <div className="p-3 border-t border-[#DDD8C9] bg-[#F7F4EC] shrink-0">
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 truncate">
+              <span className="w-2 h-2 rounded-full bg-[#526B4A] animate-pulse shrink-0" />
+              {isDesktopOpen && (
+                <div className="truncate">
+                  <p className="font-bold text-[#163024] text-[11px] truncate">{currentUser.name}</p>
+                  <p className="text-[9px] text-[#687067] uppercase font-mono tracking-wider truncate">
+                    {(effectiveRole || '').replace(/_/g, ' ')}
+                  </p>
+                </div>
+              )}
+            </div>
+            {isDesktopOpen && (
+              <span className="text-[10px] font-bold font-mono text-[#526B4A] bg-white px-2 py-0.5 rounded border border-[#DDD8C9]">
+                ONLINE
+              </span>
+            )}
+          </div>
+        </div>
+      </aside>
+
+      {/* Profile Details Modal */}
+      <ProfileModal isOpen={showProfileModal} onClose={() => setShowProfileModal(false)} />
+    </>
+  );
+};

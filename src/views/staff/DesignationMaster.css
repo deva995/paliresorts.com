@@ -1,0 +1,241 @@
+
+/* Pali Resort — Designation Master scoped theme */
+.pali-designation-master {
+  color: #163024;
+}
+
+.pali-designation-master .dt-container {
+  font-family: inherit;
+  font-size: 13px;
+  color: #244737;
+}
+
+.pali-designation-master .dt-layout-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.pali-designation-master .dt-layout-cell {
+  min-width: 0;
+}
+
+.pali-designation-master .dt-search,
+.pali-designation-master .dt-length {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #687067;
+}
+
+.pali-designation-master .dt-search input,
+.pali-designation-master .dt-length select {
+  border: 1px solid #DDD8C9;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 12px;
+  background: #F7F4EC;
+  color: #163024;
+  outline: none;
+  margin: 0;
+}
+
+.pali-designation-master .dt-search input {
+  width: min(260px, 100%);
+}
+
+.pali-designation-master .dt-search input:focus,
+.pali-designation-master .dt-length select:focus {
+  border-color: #C5A86A;
+  box-shadow: 0 0 0 2px #C5A86A33;
+}
+
+.pali-designation-master .pali-designation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.pali-designation-master .pali-designation-table thead th {
+  background: #F7F4EC;
+  color: #163024;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 13px 12px;
+  border-bottom: 1px solid #DDD8C9;
+  white-space: nowrap;
+}
+
+.pali-designation-master .pali-designation-table tbody td {
+  padding: 13px 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #EAE6DC;
+  color: #244737;
+}
+
+.pali-designation-master .pali-designation-table tbody tr:hover td {
+  background: #F7F4EC;
+}
+
+.pali-designation-master .dt-info {
+  font-size: 12px;
+  color: #687067;
+}
+
+.pali-designation-master .dt-paging {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pali-designation-master .dt-paging .dt-paging-button {
+  border: 1px solid #DDD8C9 !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  font-size: 12px;
+  color: #163024 !important;
+  background: white !important;
+  margin: 0 2px;
+}
+
+.pali-designation-master .dt-paging .dt-paging-button.current {
+  background: #163024 !important;
+  color: white !important;
+  border-color: #163024 !important;
+}
+
+.pali-designation-master .pali-designation-edit {
+  border: 1px solid #163024;
+  color: #163024;
+  background: white;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 11px;
+}
+
+.pali-designation-master .pali-designation-edit:hover {
+  background: #163024;
+  color: white;
+}
+
+.pali-designation-master .pali-designation-toggle {
+  border: 1px solid #DDD8C9;
+  color: #687067;
+  background: white;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 11px;
+}
+
+.pali-designation-master .pali-designation-toggle:hover {
+  background: #F7F4EC;
+  color: #163024;
+}
+
+@media (max-width: 640px) {
+  .pali-designation-master .dt-layout-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pali-designation-master .dt-search input {
+    width: 100%;
+  }
+}
+
+
+/* Designation Master — DataTables layout correction */
+
+.pali-designation-master .dt-container > .dt-layout-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  width: 100%;
+}
+
+.pali-designation-master .dt-container > .dt-layout-row > .dt-layout-cell {
+  flex: 0 1 auto;
+  width: auto !important;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+.pali-designation-master .dt-container > .dt-layout-row > .dt-layout-cell.dt-layout-full {
+  flex: 1 1 100%;
+  width: 100% !important;
+}
+
+.pali-designation-master .dt-container .dt-search {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pali-designation-master .dt-container .dt-search input {
+  width: 250px;
+  max-width: 100%;
+}
+
+.pali-designation-master .dt-container .dt-length {
+  display: flex !important;
+  align-items: center;
+}
+
+.pali-designation-master .dt-container .dt-paging {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pali-designation-master .dt-container .dt-paging button,
+.pali-designation-master .dt-container .dt-paging .dt-paging-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 34px;
+  height: 34px;
+  padding: 5px 9px !important;
+}
+
+.pali-designation-master .dt-container .dt-info {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .pali-designation-master .dt-container > .dt-layout-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .pali-designation-master .dt-container > .dt-layout-row > .dt-layout-cell {
+    width: 100% !important;
+  }
+
+  .pali-designation-master .dt-container .dt-search {
+    justify-content: stretch;
+  }
+
+  .pali-designation-master .dt-container .dt-search input {
+    width: 100%;
+  }
+
+  .pali-designation-master .dt-container .dt-paging {
+    justify-content: center;
+  }
+}

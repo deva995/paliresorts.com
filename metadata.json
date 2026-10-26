@@ -1,0 +1,6 @@
+{
+  "name": "Pali Resort & Club",
+  "description": "Pali Resort & Club - Nature's Gateway Luxury Resort, Hotel & Multi-Outlet Restaurant Management Platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
